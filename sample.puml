@@ -1,7 +1,9 @@
 @startuml TesteMDL
 
+' Incluindo a extensão MDL
 !includeurl https://raw.githubusercontent.com/pisanidaarch/mdl/main/mdl.puml
 
+' Criando o diagrama de teste
 Boundary --> Layer : organiza
 Layer --> BlackBox : contém
 Actor --> FrontEnd : interage com

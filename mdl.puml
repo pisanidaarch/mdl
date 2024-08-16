@@ -1,84 +1,68 @@
-@startuml MDLExtension
+@startuml MDLCompleteSetup
 
-' Definindo Estilos para MDL
+' Definindo Cores Globais
+!define MDL_FONT_COLOR White
+!define MDL_BG_COLOR #1E90FF
+!define MDL_BORDER_COLOR #1E90FF
+!define MDL_BLACKBOX_BG_COLOR Black
+!define MDL_BLACKBOX_FONT_COLOR White
+!define MDL_BOUNDARY_BORDER_STYLE dashed
+!define MDL_BOUNDARY_FONT_COLOR #1E90FF
 
-skinparam componentStyle rectangle
-skinparam monochrome false
-
-' Definindo as cores padrões
-skinparam default {
-    BackgroundColor #FFFFFF
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    ArrowColor #1E90FF
+' Estilo para Containers (Front-end, Back-end, etc.)
+skinparam component {
+  BackgroundColor MDL_BG_COLOR
+  BorderColor MDL_BORDER_COLOR
+  FontColor MDL_FONT_COLOR
 }
 
-' Definindo o estilo para Boundary
-rectangle "boundary" as Boundary {
-  skinparam {
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    BorderThickness 1
-    BorderStyle dash
-  }
+' Estilo para Banco de Dados
+skinparam database {
+  BackgroundColor MDL_BG_COLOR
+  BorderColor MDL_BORDER_COLOR
+  FontColor MDL_FONT_COLOR
 }
 
-' Definindo o estilo para Layer
-rectangle "layer <<details>>" as Layer {
-  skinparam {
-    BackgroundColor White
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    Shadowing false
-  }
+' Estilo para Black Box
+skinparam rectangle {
+  BackgroundColor MDL_BLACKBOX_BG_COLOR
+  BorderColor MDL_BORDER_COLOR
+  FontColor MDL_BLACKBOX_FONT_COLOR
 }
 
-' Definindo o estilo para Black Box
-rectangle "black-box" as BlackBox {
-  skinparam {
-    BackgroundColor #1E90FF
-    FontColor White
-    BorderColor #1E90FF
-  }
+' Estilo para Boundary
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor MDL_BORDER_COLOR
+  FontColor MDL_BOUNDARY_FONT_COLOR
+  BorderStyle MDL_BOUNDARY_BORDER_STYLE
 }
 
-' Definindo o estilo para Front-end
-component "front-end <<details>>" as FrontEnd {
-  skinparam {
-    BackgroundColor White
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    BorderThickness 1
-  }
+@enduml
+
+@startuml
+
+' Criando o Boundary para agrupar os componentes
+rectangle "Boundary 1" as B1 {
+    ' Definindo Front-end e Back-end como componentes
+    component R1 as "Front-end"
+    component R2 as "Back-end"
+
+    ' Definindo Database
+    database DB1 as "Database"
+
+    ' Definindo Black Box
+    rectangle R3 as "Black Box"
 }
 
-' Definindo o estilo para Back-end
-component "back-end <<details>>" as BackEnd {
-  skinparam {
-    BackgroundColor White
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    BorderThickness 1
-  }
-}
+' Adicionando um User (ator)
+actor U as "User"
 
-' Definindo o estilo para Database
-database "database <<details>>" as Database {
-  skinparam {
-    BackgroundColor White
-    BorderColor #1E90FF
-    FontColor #1E90FF
-    BorderThickness 1
-  }
-}
-
-' Estilo para Atores
-skinparam actor {
-    BackgroundColor White
-    FontColor #1E90FF
-    BorderColor #1E90FF
-}
-
-actor "Actor"
+' Conectores entre os elementos
+U --> R1 : "Interage com"
+R1 --> R2 : "Comunica com"
+R2 --> DB1 : "Acessa"
+R1 --> R3 : "Usa parte"
+R3 --> DB1 : "Armazena"
 
 @enduml
