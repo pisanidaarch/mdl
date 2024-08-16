@@ -143,24 +143,25 @@ UpdateElementStyle("external_user")
 ' ##################################
 
 !function $getUser($label, $type, $descr, $sprite)
-  !if ($sprite == "") && ($defaultUserSprite != "")
+  !if ($sprite == "") && (%variable_exists("$defaultUserSprite") && $defaultUserSprite != "")
     !$sprite = $defaultUserSprite
   !endif
   !return $getElementBase($label, $type, $descr, $sprite)
 !endfunction
 
 !unquoted procedure User($alias, $label, $descr="", $sprite="", $tags="", $link="", $type="")
-!$sprite=$toElementArg($sprite, $tags, "ElementTagSprite", "user")
-' $type reutiliza $techn definição de $tags
-!$type=$toElementArg($type, $tags, "ElementTagTechn", "user")
-!if ($portraitUser == "portrait") && ($sprite == "")
-actor "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
-!elseif ($portraitUser == "outline") && ($sprite == "")
-person "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
-!else
-rectangle "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
-!endif
+  !$sprite = $toElementArg($sprite, $tags, "ElementTagSprite", "user")
+  ' $type reutiliza $techn definição de $tags
+  !$type = $toElementArg($type, $tags, "ElementTagTechn", "user")
+  !if (%variable_exists("$portraitUser") && $portraitUser == "portrait") && ($sprite == "")
+    actor "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+  !elseif (%variable_exists("$portraitUser") && $portraitUser == "outline") && ($sprite == "")
+    person "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+  !else
+    rectangle "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+  !endif
 !endprocedure
+
 
 !unquoted procedure User_Ext($alias, $label,$descr="", $sprite="", $tags="", $link="", $type="")
 !$sprite=$toElementArg($sprite, $tags, "ElementTagSprite", "external_user")
