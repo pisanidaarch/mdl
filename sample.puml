@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/pisanidaarch/mdl/main/mdl.puml
+
+title Exemplo Simplificado de Diagrama MDL
+
+' Definindo um único sistema
+Boundary(sistemaSimples, "Sistema Exemplo") {
+   Frontend(interfaceUsuario, "Interface de Usuário", "HTML/CSS", "Interface para interação com o usuário")
+   Backend(logicaNegocio, "Lógica de Negócios", "Java", "Processa as regras de negócio")
+   Data(bancoDados, "Banco de Dados", "MySQL", "Armazena dados do sistema")
+}
+
+' Definindo interações entre os componentes
+Link(interfaceUsuario, logicaNegocio, "Envia dados para processamento")
+Link(logicaNegocio, bancoDados, "Grava dados no banco")
+Link(bancoDados, interfaceUsuario, "Retorna informações para exibição")
+
+@enduml
