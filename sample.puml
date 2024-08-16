@@ -1,20 +1,12 @@
-@startuml
-!include https://raw.githubusercontent.com/pisanidaarch/mdl/main/mdl.puml
+@startuml TesteMDL
 
-title Exemplo de Diagrama MDL2 - Sistema de E-commerce
+!includeurl https://raw.githubusercontent.com/pisanidaarch/mdl/main/mdl.puml
 
-' Definindo os componentes do sistema
-Boundary(ecommerceSystem, "Sistema de E-commerce") {
-   User(cliente, "Cliente", "Pessoa que faz compras no sistema")
-   Frontend(webApp, "Aplicação Web", "React", "Interface para o usuário fazer compras")
-   Backend(servidorApp, "Servidor de Aplicações", "Node.js", "Processa as compras e gerencia produtos")
-   Data(bancoDados, "Banco de Dados", "PostgreSQL", "Armazena dados de produtos, clientes e pedidos")
-}
-
-' Definindo as interações entre os componentes
-Link(cliente, webApp, "Acessa a")
-Link(webApp, servidorApp, "Envia pedidos para processamento")
-Link(servidorApp, bancoDados, "Consulta e atualiza")
-Link(bancoDados, webApp, "Retorna informações para exibição")
+Boundary --> Layer : organiza
+Layer --> BlackBox : contém
+Actor --> FrontEnd : interage com
+FrontEnd --> BackEnd : comunica com
+BackEnd --> Database : acessa dados
+FrontEnd --> BlackBox : usa parte
 
 @enduml
