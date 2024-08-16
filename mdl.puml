@@ -1,10 +1,3 @@
-' Converta com o argumento adicional de linha de comando -DRELATIVE_INCLUDE="relative/absolute" para usar localmente
-!if %variable_exists("RELATIVE_INCLUDE")
-  !include ./MDL2.puml
-!else
-  !include https://path.to.your/MDL2.puml
-!endif
-
 ' Escopo: Um único sistema de software.
 ' Elementos primários: O sistema de software em escopo.
 ' Elementos de suporte: Pessoas e sistemas de software conectados diretamente ao sistema de software em escopo.
