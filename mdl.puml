@@ -1,0 +1,211 @@
+' Converta com o argumento adicional de linha de comando -DRELATIVE_INCLUDE="relative/absolute" para usar localmente
+!if %variable_exists("RELATIVE_INCLUDE")
+  !include ./MDL2.puml
+!else
+  !include https://path.to.your/MDL2.puml
+!endif
+
+' Escopo: Um único sistema de software.
+' Elementos primários: O sistema de software em escopo.
+' Elementos de suporte: Pessoas e sistemas de software conectados diretamente ao sistema de software em escopo.
+' Público-alvo: Todos, tanto pessoas técnicas quanto não técnicas, dentro e fora da equipe de desenvolvimento de software.
+
+' Cores
+' ##################################
+
+!$USER_FONT_COLOR ?= $ELEMENT_FONT_COLOR
+!$USER_BG_COLOR ?= "#08427B"
+!$USER_BORDER_COLOR ?= "#073B6F"
+
+!$EXTERNAL_USER_FONT_COLOR ?= $ELEMENT_FONT_COLOR
+!$EXTERNAL_USER_BG_COLOR ?= "#686868"
+!$EXTERNAL_USER_BORDER_COLOR ?= "#8A8A8A"
+
+!$FRONTEND_FONT_COLOR ?= $ELEMENT_FONT_COLOR
+!$FRONTEND_BG_COLOR ?= "#1168BD"
+!$FRONTEND_BORDER_COLOR ?= "#3C7FC0"
+
+!$BACKEND_FONT_COLOR ?= $ELEMENT_FONT_COLOR
+!$BACKEND_BG_COLOR ?= "#999999"
+!$BACKEND_BORDER_COLOR ?= "#8A8A8A"
+
+!$DATA_FONT_COLOR ?= $ELEMENT_FONT_COLOR
+!$DATA_BG_COLOR ?= "#BFDFF2"
+!$DATA_BORDER_COLOR ?= "#94B8D6"
+
+' Estilos
+' ##################################
+
+UpdateElementStyle("user", $USER_BG_COLOR, $USER_FONT_COLOR, $USER_BORDER_COLOR)
+UpdateElementStyle("external_user", $EXTERNAL_USER_BG_COLOR, $EXTERNAL_USER_FONT_COLOR, $EXTERNAL_USER_BORDER_COLOR)
+UpdateElementStyle("frontend", $FRONTEND_BG_COLOR, $FRONTEND_FONT_COLOR, $FRONTEND_BORDER_COLOR)
+UpdateElementStyle("backend", $BACKEND_BG_COLOR, $BACKEND_FONT_COLOR, $BACKEND_BORDER_COLOR)
+UpdateElementStyle("data", $DATA_BG_COLOR, $DATA_FONT_COLOR, $DATA_BORDER_COLOR)
+
+' atalhos com cores padrão
+!unquoted procedure AddUserTag($tagStereo, $bgColor="", $fontColor="", $borderColor="", $shadowing="", $shape="", $sprite="", $legendText="", $legendSprite="", $type="", $borderStyle="", $borderThickness="")
+  $addElementTagInclReuse("user", $tagStereo, $bgColor, $fontColor, $borderColor, $shadowing, $shape, $sprite, $type, $legendText, $legendSprite, $borderStyle, $borderThickness)
+!endprocedure
+!unquoted procedure AddExternalUserTag($tagStereo, $bgColor="", $fontColor="", $borderColor="", $shadowing="", $shape="", $sprite="", $legendText="", $legendSprite="", $type="", $borderStyle="", $borderThickness="")
+  $addElementTagInclReuse("external_user", $tagStereo, $bgColor, $fontColor, $borderColor, $shadowing, $shape, $sprite, $type, $legendText, $legendSprite, $borderStyle, $borderThickness)
+!endprocedure
+!unquoted procedure AddFrontendTag($tagStereo, $bgColor="", $fontColor="", $borderColor="", $shadowing="", $shape="", $sprite="", $legendText="", $legendSprite="", $type="", $borderStyle="", $borderThickness="")
+  $addElementTagInclReuse("frontend", $tagStereo, $bgColor, $fontColor, $borderColor, $shadowing, $shape, $sprite, $type, $legendText, $legendSprite, $borderStyle, $borderThickness)
+!endprocedure
+!unquoted procedure AddBackendTag($tagStereo, $bgColor="", $fontColor="", $borderColor="", $shadowing="", $shape="", $sprite="", $legendText="", $legendSprite="", $type="", $borderStyle="", $borderThickness="")
+  $addElementTagInclReuse("backend", $tagStereo, $bgColor, $fontColor, $borderColor, $shadowing, $shape, $sprite, $type, $legendText, $legendSprite, $borderStyle, $borderThickness)
+!endprocedure
+!unquoted procedure AddDataTag($tagStereo, $bgColor="", $fontColor="", $borderColor="", $shadowing="", $shape="", $sprite="", $legendText="", $legendSprite="", $type="", $borderStyle="", $borderThickness="")
+  $addElementTagInclReuse("data", $tagStereo, $bgColor, $fontColor, $borderColor, $shadowing, $shape, $sprite, $type, $legendText, $legendSprite, $borderStyle, $borderThickness)
+!endprocedure
+
+' Sprites (representações gráficas)
+' ##################################
+
+sprite $user [48x48/16] {
+  ' Coloque aqui o sprite do usuário
+}
+
+sprite $frontend [48x48/16] {
+  ' Coloque aqui o sprite do frontend
+}
+
+sprite $backend [48x48/16] {
+  ' Coloque aqui o sprite do backend
+}
+
+sprite $data [48x48/16] {
+  ' Coloque aqui o sprite do data
+}
+
+' Layout
+' ##################################
+
+SetDefaultLegendEntries("user\nfrontend\nbackend\ndata\nboundary")
+
+!procedure LAYOUT_WITH_LEGEND()
+hide stereotype
+legend right
+|<color:$LEGEND_TITLE_COLOR>**Legenda**</color> |
+|<$USER_BG_COLOR> usuário |
+|<$FRONTEND_BG_COLOR> frontend|
+|<$BACKEND_BG_COLOR> backend |
+|<$DATA_BG_COLOR> data |
+endlegend
+!endprocedure
+
+!global $defaultUserSprite = "user"
+!$dummy = $restoreEmpty("user", "sprite", $defaultUserSprite, %true())
+UpdateElementStyle("user")
+' workaround of plantuml.jar bug - user overwrites external_user setting
+!$dummy = $restoreEmpty("external_user", "sprite", $defaultUserSprite, %true())
+UpdateElementStyle("external_user")
+!global $portraitUser = "false"
+
+!procedure $clearUserRestore()
+  !$dummy = $clearRestore("user", "sprite")
+  !$dummy = $clearRestore("user", "legendSprite")
+  %set_variable_value("$" + "user" + "ElementTagSprite", "")
+  UpdateElementStyle("user")
+  ' workaround of plantuml.jar bug - user overwrites external_user setting
+  !$dummy = $clearRestore("external_user", "sprite")
+  !$dummy = $clearRestore("external_user", "legendSprite")
+  %set_variable_value("$" + "external_user" + "ElementTagSprite", "")
+  UpdateElementStyle("external_user")
+!endprocedure
+
+!procedure HIDE_USER_SPRITE()
+  !$defaultUserSprite = ""
+  !$portraitUser = "false"
+  $clearUserRestore()
+!endprocedure
+
+!unquoted procedure SHOW_USER_SPRITE($sprite="")
+  !if ($sprite == "")
+    !$defaultUserSprite = "user"
+  !else
+    !$defaultUserSprite = $sprite
+  !endif
+  !$dummy = $restoreEmpty("user", "sprite", $defaultUserSprite, %true())
+  UpdateElementStyle("user")
+  ' workaround of plantuml.jar bug - user overwrites external_user setting
+  !$dummy = $restoreEmpty("external_user", "sprite", $defaultUserSprite, %true())
+  UpdateElementStyle("external_user")
+  !$portraitUser = "false"
+!endprocedure
+
+!unquoted procedure SHOW_USER_PORTRAIT()
+  !$defaultUserSprite = ""
+  !$portraitUser = "portrait"
+  $clearUserRestore()
+!endprocedure
+
+!unquoted procedure SHOW_USER_OUTLINE()
+  !$defaultUserSprite = ""
+  !$portraitUser = "outline"
+  $clearUserRestore()
+!endprocedure
+
+' Elementos
+' ##################################
+
+!function $getUser($label, $type, $descr, $sprite)
+  !if ($sprite == "") && ($defaultUserSprite != "")
+    !$sprite = $defaultUserSprite
+  !endif
+  !return $getElementBase($label, $type, $descr, $sprite)
+!endfunction
+
+!unquoted procedure User($alias, $label, $descr="", $sprite="", $tags="", $link="", $type="")
+!$sprite=$toElementArg($sprite, $tags, "ElementTagSprite", "user")
+' $type reutiliza $techn definição de $tags
+!$type=$toElementArg($type, $tags, "ElementTagTechn", "user")
+!if ($portraitUser == "portrait") && ($sprite == "")
+actor "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+!elseif ($portraitUser == "outline") && ($sprite == "")
+person "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+!else
+rectangle "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("user", $tags) as $alias $getLink($link)
+!endif
+!endprocedure
+
+!unquoted procedure User_Ext($alias, $label,$descr="", $sprite="", $tags="", $link="", $type="")
+!$sprite=$toElementArg($sprite, $tags, "ElementTagSprite", "external_user")
+' $type reutiliza $techn definição de $tags
+!$type=$toElementArg($type, $tags, "ElementTagTechn", "external_user")
+!if ($portraitUser == "portrait") && ($sprite == "")
+actor "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("external_user", $tags) as $alias $getLink($link)
+!elseif ($portraitUser == "outline") && ($sprite == "")
+person "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("external_user", $tags) as $alias $getLink($link)
+!else
+rectangle "$getUser($label, $type, $descr, $sprite)$getProps()" $toStereos("external_user", $tags) as $alias $getLink($link)
+!endif
+!endprocedure
+
+!unquoted procedure Frontend($alias, $label, $descr="", $sprite="", $tags="", $link="", $type="", $baseShape="parallelogram")
+' $type reutiliza $techn definição de $tags
+$getElementLine($baseShape, "frontend", $alias, $label, $type, $descr, $sprite, $tags, $link)
+!endprocedure
+
+!unquoted procedure Backend($alias, $label, $descr="", $sprite="", $tags="", $link="", $type="", $baseShape="ellipse")
+' $type reutiliza $techn definição de $tags
+$getElementLine($baseShape , "backend", $alias, $label, $type, $descr, $sprite, $tags, $link)
+!endprocedure
+
+!unquoted procedure Data($alias, $label, $descr="", $sprite="", $tags="", $link="", $type="", $baseShape="cylinder")
+' $type reutiliza $techn definição de $tags
+$getElementLine($baseShape , "data", $alias, $label, $type, $descr, $sprite, $tags, $link)
+!endprocedure
+
+' Limites (Boundaries)
+' ##################################
+
+!unquoted procedure Boundary($alias, $label, $tags="", $link="", $descr = "")
+!if ($tags != "")
+!$allTags = $tags + '+boundary'
+!else
+!$allTags = 'boundary'
+!endif
+' $type definido via $tag style
+Boundary($alias, $label, "", $allTags, $link, $descr)
+!endprocedure
